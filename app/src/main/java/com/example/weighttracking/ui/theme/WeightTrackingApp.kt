@@ -1,5 +1,6 @@
 package com.example.weighttracking.ui.theme
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -114,15 +115,21 @@ fun CalendarItem(dayViewModel: DayViewModel){
                 style = MaterialTheme.typography.bodySmall)
         }
     }
+    MainContent(dayViewModel = dayViewModel)
+
 }
 
 @Composable
 fun Calendar(calendarViewModel: CalendarViewModel) {
     val viewModelStoreOwner = LocalViewModelStoreOwner.current
         ?: throw IllegalStateException("ViewModelStoreOwner is not available.")
+    Log.d("My Tag", "ViewModelStoreOwner: $viewModelStoreOwner")
 
     val listState = rememberLazyListState()
+
     val calendarDates = calendarViewModel.calendarDates
+    Log.d("My Tag", "calendarDates: $calendarDates")
+
 
     LazyRow(state = listState) {
         items(items = calendarDates) { date ->
@@ -136,7 +143,7 @@ fun Calendar(calendarViewModel: CalendarViewModel) {
 
 
 @Composable
-fun MainContent(dayViewModel: DayViewModel, calendarViewModel: CalendarViewModel){
+fun MainContent(dayViewModel: DayViewModel){
     val date = dayViewModel.date
     var  weight by remember { mutableStateOf(date.weight.toString()) }
     Column(verticalArrangement = Arrangement.Center,
