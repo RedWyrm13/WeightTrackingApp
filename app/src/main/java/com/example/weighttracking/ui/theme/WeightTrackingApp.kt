@@ -3,7 +3,6 @@ package com.example.weighttracking.ui.theme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,19 +11,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,49 +27,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weighttracking.R
 import com.example.weighttracking.ui.theme.viewmodel.AppViewModelProvider
-import com.example.weighttracking.ui.theme.viewmodel.DayViewModel
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModel
+import com.example.weighttracking.ui.theme.viewmodel.DayViewModel
+import com.example.weighttracking.ui.theme.viewmodel.createDayViewModelForDay
 
 
 @Composable
-fun WeightTrackingApp(modifier: Modifier = Modifier){
-    val dayViewModel: DayViewModel = viewModel(
-        factory = AppViewModelProvider.Factory
-    )
-    val calendarViewModel = viewModel(factory = AppViewModelProvider.Factory)
+fun WeightTrackingApp(){
 
-    CalendarApp(dayViewModel = DayViewModel, calendarViewModel = calendarViewModel)
+    val calendarViewModel: CalendarViewModel = viewModel(factory = AppViewModelProvider.Factory)
+
+    CalendarApp(calendarViewModel = calendarViewModel)
 
 }
 
 @Composable
-fun Header(dayViewModel: DayViewModel, calendarViewModel: CalendarViewModel) {
+fun Header(calendarViewModel: CalendarViewModel) {
+    // I can probably get rid of the Row composable, but we will keep it for now in case I want to add
+    // more to it later
     Row(
         modifier = Modifier.padding(horizontal = 6.dp)
     ) {
-        Text(text = if (calendarViewModel.selectedDate == calendarViewModel.TODAY) "Today"
-        else {
-            calendarViewModel.selectedDate.date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)))
-        },
+        Text(text = "Today",
             modifier = Modifier
                 .weight(1f)
                 .align(Alignment.CenterVertically))
-        IconButton(onClick = {}){
-            Icon(imageVector = Icons.Filled.ChevronLeft, contentDescription = "Previous")
-        }
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(imageVector = Icons.Filled.ChevronRight, contentDescription = "Next")
-        }
     }
 }
 
 @Composable
-fun CalendarApp(dayViewModel: DayViewModel, calendarViewModel: CalendarViewModel, modifier: Modifier = Modifier) {
+fun CalendarApp(calendarViewModel: CalendarViewModel, modifier: Modifier = Modifier) {
 
 
     Column(modifier = modifier
@@ -85,31 +69,24 @@ fun CalendarApp(dayViewModel: DayViewModel, calendarViewModel: CalendarViewModel
 
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
-        TopRowContent(dayViewModel= dayViewModel, calendarViewModel = calendarViewModel)
-        Spacer(modifier = Modifier.height(16.dp))
-        MainContent()
+        TopRowContent(calendarViewModel = calendarViewModel)
     }
 }
 @Composable
-fun TopRowContent(dayViewModel: DayViewModel, calendarViewModel = calendarViewModel){
+fun TopRowContent(calendarViewModel: CalendarViewModel){
     Column(){
-        Header(dayViewModel = dayViewModel)
-        Calendar(dayViewModel = dayViewModel)
+        Header(calendarViewModel = calendarViewModel)
+        Calendar(calendarViewModel = calendarViewModel)
     }
 }
 
 @Composable
 fun CalendarItem(dayViewModel: DayViewModel){
-
-    val isToday = date.isToday
-
-
+    val calendarDate = dayViewModel.date
     Card(
        modifier = Modifier
            .padding(vertical = 4.dp, horizontal = 4.dp),
-        colors = if (isToday) {CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary)}
-        else{
-            CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)},
+           colors= CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
 
     ){
         Column(
@@ -118,21 +95,21 @@ fun CalendarItem(dayViewModel: DayViewModel){
                 .height(72.dp)
                 .padding(4.dp)
         ){
-            if (date.date.dayOfMonth.toString() == "1") {
-                Text(text = date.month,
+            if (calendarDate.date.dayOfMonth.toString() == "1") {
+                Text(text = calendarDate.date.month.toString(),
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     style = MaterialTheme.typography.bodyMedium)
             }
-            Text(text = date.day,
+            Text(text = calendarDate.date.dayOfWeek.toString(),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.bodySmall)
 
-            Text(text = date.date.dayOfMonth.toString(),
+            Text(text = calendarDate.date.dayOfMonth.toString(),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.bodyMedium)
 
 
-            Text(text = "171.5",
+            Text(text = "${calendarDate.weight}",
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.bodySmall)
         }
@@ -140,26 +117,28 @@ fun CalendarItem(dayViewModel: DayViewModel){
 }
 
 @Composable
-fun Calendar(dayViewModel: DayViewModel, calendarViewModel = calendarViewModel){
-    val listState = rememberLazyListState()
-    val todayIndex = calendarUiModel.visibleDates.indexOfFirst{it.isToday}
+fun Calendar(calendarViewModel: CalendarViewModel) {
+    val viewModelStoreOwner = LocalViewModelStoreOwner.current
+        ?: throw IllegalStateException("ViewModelStoreOwner is not available.")
 
-    LaunchedEffect(todayIndex) {
-        if (todayIndex >= 0) {
-            listState.scrollToItem(todayIndex)
-        }
-    }
+    val listState = rememberLazyListState()
+    val calendarDates = calendarViewModel.calendarDates
 
     LazyRow(state = listState) {
-        items(items = calendarUiModel.visibleDates){ date ->
-                CalendarItem(date)
+        items(items = calendarDates) { date ->
+            val dayViewModel = remember(date) {
+                createDayViewModelForDay(AppViewModelProvider.Factory, viewModelStoreOwner, date)
+            }
+            CalendarItem(dayViewModel = dayViewModel)
         }
     }
 }
 
+
 @Composable
-fun MainContent(dayViewModel: DayViewModel, calendarViewModel = calendarViewModel){
-    var  weight by remember { mutableStateOf(recordedWeight)}
+fun MainContent(dayViewModel: DayViewModel, calendarViewModel: CalendarViewModel){
+    val date = dayViewModel.date
+    var  weight by remember { mutableStateOf(date.weight.toString()) }
     Column(verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
         TextField(value = weight, onValueChange = {weight = it})
@@ -175,8 +154,6 @@ fun MainContent(dayViewModel: DayViewModel, calendarViewModel = calendarViewMode
 @Preview(showSystemUi = true)
 @Composable
 fun WeightAppPreview() {
-    WeightTrackingApp(
-        modifier = Modifier.padding(16.dp)
-    )
+    WeightTrackingApp()
 }
 

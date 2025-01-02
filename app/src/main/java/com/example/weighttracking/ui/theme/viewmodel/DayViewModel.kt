@@ -7,8 +7,9 @@ import com.example.weighttracking.data.CalendarRepositoryImplementation
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class DayViewModel(private val calendarRepositoryImplementation: CalendarRepositoryImplementation) : ViewModel() {
-    val today = calendarRepositoryImplementation.getTodaysDate()
+class DayViewModel(
+    private val calendarRepositoryImplementation: CalendarRepositoryImplementation,
+     val date: CalendarDate) : ViewModel() {
 
 
     suspend fun getWeightForDate(date: LocalDate): CalendarDate? {

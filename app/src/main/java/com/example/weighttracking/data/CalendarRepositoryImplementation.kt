@@ -25,4 +25,6 @@ class CalendarRepositoryImplementation(private val calendarDao: CalendarDao): Ca
     override fun getTodaysDate(): LocalDate {
         return LocalDate.now()
     }
+    val today = CalendarDate(LocalDate.now(), 0.0)
+    val selectedDay: CalendarDate = today
 }

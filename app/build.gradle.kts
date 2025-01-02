@@ -1,6 +1,8 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp") version "2.1.0-1.0.29"
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -50,12 +52,17 @@ android {
 }
 
 dependencies {
+    // Rooms Components
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.core.ktx)
+    ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
+    implementation(libs.androidx.room.ktx)
 
     //Extended Icons options
-    implementation ("androidx.compose.material:material-icons-extended:1.7.6")
+    implementation (libs.androidx.material.icons.extended)
 
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-    implementation ("androidx.compose.runtime:runtime:1.7.6")
+    implementation (libs.lifecycle.viewmodel.compose)
+    implementation (libs.androidx.runtime)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
