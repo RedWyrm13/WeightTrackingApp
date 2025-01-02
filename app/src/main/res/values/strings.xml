@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">WeightTracking</string>
+    <string name="save_weight">Save Weight</string>
+</resources>
