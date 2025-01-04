@@ -15,7 +15,7 @@ interface CalendarDao {
 
     // Gets the weight for a specific date
     @Query("SELECT * FROM calendar_dates WHERE date = :date")
-     suspend fun getWeightForDate(date: LocalDate): CalendarDate
+     suspend fun getWeightForDate(date: LocalDate): CalendarDate?
 
 
     // Gets all the dates and weights in the specified range

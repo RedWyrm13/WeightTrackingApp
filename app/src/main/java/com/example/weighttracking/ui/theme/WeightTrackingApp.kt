@@ -115,7 +115,6 @@ fun CalendarItem(dayViewModel: DayViewModel){
                 style = MaterialTheme.typography.bodySmall)
         }
     }
-    MainContent(dayViewModel = dayViewModel)
 
 }
 
@@ -123,12 +122,11 @@ fun CalendarItem(dayViewModel: DayViewModel){
 fun Calendar(calendarViewModel: CalendarViewModel) {
     val viewModelStoreOwner = LocalViewModelStoreOwner.current
         ?: throw IllegalStateException("ViewModelStoreOwner is not available.")
-    Log.d("My Tag", "ViewModelStoreOwner: $viewModelStoreOwner")
 
     val listState = rememberLazyListState()
 
     val calendarDates = calendarViewModel.calendarDates
-    Log.d("My Tag", "calendarDates: $calendarDates")
+    Log.d("My Tag1", "calendarDates: $calendarDates")
 
 
     LazyRow(state = listState) {

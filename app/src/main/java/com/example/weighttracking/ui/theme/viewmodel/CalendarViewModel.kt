@@ -33,16 +33,30 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
 
     init {
         viewModelScope.launch {
+            val safeDaysToSubtract = 60.coerceAtMost(today.date.dayOfYear - 1) // Adjust as needed
+
             try {
-                val safeDaysToSubtract = 60.coerceAtMost(today.date.dayOfYear - 1) // Adjust as needed
                 calendarDates = getDatesWithWeights(today.date, safeDaysToSubtract)
+                if (calendarDates.isEmpty()) {
+                    Log.d("My Tag", "calendarDates: $calendarDates")
+
+                }
             } catch (e: Exception) {
                 // Log and handle gracefully
-                Log.e("CalendarViewModel", "Error initializing calendar dates", e)
-                calendarDates = emptyList() // Provide a fallback
+                Log.e("My Tag", "Error initializing calendar dates", e)
+
             }
         }
     }
 
+
+
+    fun getDateRange(startDate: LocalDate, endDate: LocalDate): List<LocalDate> {
+        require(!startDate.isAfter(endDate)) { "Start date must be before or equal to end date" }
+
+        return generateSequence(startDate) { date ->
+            if (date.isBefore(endDate)) date.plusDays(1) else null
+        }.toList()
+    }
 
 }
