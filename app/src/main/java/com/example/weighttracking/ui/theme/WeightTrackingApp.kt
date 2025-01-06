@@ -1,7 +1,6 @@
 package com.example.weighttracking.ui.theme
 
 import CalendarViewModelFactory
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,9 +35,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.example.weighttracking.R
 import com.example.weighttracking.WeightTrackingApplication
+import com.example.weighttracking.data.AbbreviatedDay
+import com.example.weighttracking.data.CalendarDate
 import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModel
 import com.example.weighttracking.ui.theme.viewmodel.DayViewModel
-import createDayViewModelForDay
 
 
 @Composable
@@ -98,10 +98,10 @@ fun TopRowContent(calendarViewModel: CalendarViewModel){
 }
 
 @Composable
-fun CalendarItem(dayViewModel: DayViewModel){
-
-    val calendarDate = dayViewModel.date
-    Log.d("CalendarItem", "Date passed to CalendarItem: $calendarDate")
+fun CalendarItem(calendarDate: CalendarDate){
+    //Abbreviation for the day of the week
+    val abb = AbbreviatedDay.fromDayOfWeek(calendarDate.date.dayOfWeek.value)
+    val dayOfMonth = calendarDate.date.dayOfMonth.toString()
 
     Card(
        modifier = Modifier
@@ -115,16 +115,12 @@ fun CalendarItem(dayViewModel: DayViewModel){
                 .height(72.dp)
                 .padding(4.dp)
         ){
-            if (calendarDate.date.dayOfMonth.toString() == "1") {
-                Text(text = calendarDate.date.month.toString(),
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    style = MaterialTheme.typography.bodyMedium)
-            }
-            Text(text = calendarDate.date.dayOfWeek.toString(),
+
+            Text(text = abb.day,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.bodySmall)
 
-            Text(text = calendarDate.date.dayOfMonth.toString(),
+            Text(text = dayOfMonth,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.bodyMedium)
 
@@ -141,7 +137,8 @@ fun CalendarItem(dayViewModel: DayViewModel){
 fun Calendar(calendarViewModel: CalendarViewModel) {
     val isLoading by calendarViewModel.isLoading
     val calendarDates = calendarViewModel.calendarDates.value // Access the value of mutableStateOf
-    Log.d("CalendarDates", "${calendarDates}")
+    val listState = rememberLazyListState()
+
 
     if (isLoading) {
         CircularProgressIndicator(
@@ -149,25 +146,16 @@ fun Calendar(calendarViewModel: CalendarViewModel) {
                 .fillMaxSize()
                 .wrapContentSize(Alignment.Center)
         )
-    } else {
-        val viewModelStoreOwner = LocalViewModelStoreOwner.current
-            ?: throw IllegalStateException("ViewModelStoreOwner is not available.")
-
-        val repository = LocalContext.current.applicationContext
-            .let { it as WeightTrackingApplication }.calendarRepository
-
-        val listState = rememberLazyListState()
-
+    }
+    else{
         LazyRow(state = listState) {
-            items(items = calendarDates) { date ->
-                Log.d("LazyRowDate", "Date passed to LazyRow: $date")
-                val dayViewModel = createDayViewModelForDay(repository, viewModelStoreOwner, date)
-                CalendarItem(dayViewModel = dayViewModel)
+            items(items = calendarDates.reversed()) { date ->
+                CalendarItem(calendarDate = date)
             }
         }
 
     }
-}
+    }
 
 
 
