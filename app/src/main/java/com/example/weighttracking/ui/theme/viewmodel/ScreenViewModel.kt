@@ -23,6 +23,7 @@ class ScreenViewModel(private val calendarRepositoryImplementation: CalendarRepo
     private val weight: Double
             get() = selectedDate.weight
 
+    val weightInput by mutableStateOf(weight)
     val formattedDate: String
             get() = selectedDate.date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"))
 
