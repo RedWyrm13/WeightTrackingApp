@@ -9,6 +9,7 @@ import com.example.weighttracking.data.CalendarDate
 import com.example.weighttracking.data.CalendarRepositoryImplementation
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class ScreenViewModel(private val calendarRepositoryImplementation: CalendarRepositoryImplementation): ViewModel() {
     // THe following three variables are used in the composable for display
@@ -21,6 +22,8 @@ class ScreenViewModel(private val calendarRepositoryImplementation: CalendarRepo
             get() = selectedDate.date
     private val weight: Double
             get() = selectedDate.weight
+
+    val formattedDate = selectedDate.date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"))
 
     //Add weight to database on button click from composable
     fun updateWeight(weight: Double) {
