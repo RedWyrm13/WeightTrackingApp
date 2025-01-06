@@ -13,17 +13,18 @@ import java.time.format.DateTimeFormatter
 
 class ScreenViewModel(private val calendarRepositoryImplementation: CalendarRepositoryImplementation): ViewModel() {
     // THe following three variables are used in the composable for display
-    var today: CalendarDate = CalendarDate()
-        private set
+    private var today: CalendarDate = CalendarDate()
 
     var selectedDate by mutableStateOf(today)
+
 
     private val date: LocalDate
             get() = selectedDate.date
     private val weight: Double
             get() = selectedDate.weight
 
-    val weightInput by mutableStateOf(weight)
+    var weightInput by mutableStateOf(weight.toString())
+
     val formattedDate: String
             get() = selectedDate.date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"))
 

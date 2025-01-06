@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
@@ -19,6 +20,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -37,6 +39,7 @@ import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModel
 import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModelFactory
 import com.example.weighttracking.ui.theme.viewmodel.ScreenViewModel
 import com.example.weighttracking.ui.theme.viewmodel.ScreenViewModelFactory
+import java.time.LocalDate
 
 
 @Composable
@@ -72,13 +75,21 @@ fun WeightTrackingApp() {
 
 
 @Composable
-fun Header(calendarViewModel: CalendarViewModel) {
+fun Header(screenViewModel: ScreenViewModel) {
     // I can probably get rid of the Row composable, but we will keep it for now in case I want to add
     // more to it later
+    val text = screenViewModel.formattedDate
     Row(
         modifier = Modifier.padding(horizontal = 6.dp)
     ) {
-        Text(text = "Today",
+        if (screenViewModel.selectedDate.date == LocalDate.now())
+            Text(text = "Today, ")
+        if (screenViewModel.selectedDate.date == LocalDate.now().plusDays(1))
+            Text(text = "Tomorrow, ")
+        if (screenViewModel.selectedDate.date == LocalDate.now().minusDays(1))
+            Text(text = "Yesterday, ")
+
+        Text(text = text,
             modifier = Modifier
                 .weight(1f)
                 .align(Alignment.CenterVertically))
@@ -103,9 +114,10 @@ fun CalendarApp(
 }
 @Composable
 fun TopRowContent(calendarViewModel: CalendarViewModel, screenViewModel: ScreenViewModel) {
-    Column {
-        Header(calendarViewModel = calendarViewModel)
+        Column {
+        Header(screenViewModel = screenViewModel)
         Calendar(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
+        ButtonBox(screenViewModel = screenViewModel)
     }
 }
 
@@ -117,13 +129,16 @@ fun CalendarItem(
     val abb = AbbreviatedDay.fromDayOfWeek(calendarDate.date.dayOfWeek.value)
     val dayOfMonth = calendarDate.date.dayOfMonth.toString()
 
-    val isSelected = calendarDate.date == screenViewModel.selectedDate?.date
+    val isSelected = calendarDate.date == screenViewModel.selectedDate.date
     var color = Color.Black
+
 
     Card(
        modifier = Modifier
            .padding(vertical = 4.dp, horizontal = 4.dp)
-           .clickable { screenViewModel.selectedDate = calendarDate },
+           .clickable {
+               screenViewModel.selectedDate = calendarDate
+               screenViewModel.weightInput = calendarDate.weight.toString()     },
            colors= if (isSelected){
                CardDefaults.cardColors(containerColor = Color.Black)
 
@@ -188,7 +203,25 @@ fun Calendar(calendarViewModel: CalendarViewModel, screenViewModel: ScreenViewMo
         }
 
     }
+}
+
+@Composable
+fun ButtonBox(screenViewModel: ScreenViewModel) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ){
+        TextField(
+            value = screenViewModel.weightInput,
+            onValueChange = { screenViewModel.weightInput = it}, // Updates the text state
+            label = { Text("Weight") }, // Label shown above the text field
+            placeholder = { Text("Enter weight") }, // Hint text
+        )
     }
+}
 
 
 
