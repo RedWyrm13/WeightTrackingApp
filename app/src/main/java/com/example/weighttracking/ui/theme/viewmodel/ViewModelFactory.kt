@@ -15,3 +15,15 @@ class CalendarViewModelFactory(
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+
+class ScreenViewModelFactory(
+    private val repository: CalendarRepositoryImplementation
+): ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(ScreenViewModel::class.java)) {
+            return ScreenViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
