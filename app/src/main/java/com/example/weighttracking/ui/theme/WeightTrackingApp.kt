@@ -114,7 +114,7 @@ fun CalendarApp(
         Calendar(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
         WeightApp(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
         if (calendarViewModel.dataPairs.isNotEmpty()) {
-            GraphView(data = calendarViewModel.dataPairs)
+            GraphView(data = calendarViewModel.dataPairs.reversed())
         }
     }
 }
