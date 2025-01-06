@@ -27,10 +27,7 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
         private set
     val dataPairs: List<Pair<String, Float>>
         get() = if (calendarDates.value.isEmpty()) emptyList() else getData(calendarDates.value)
-    val xData: List<Float>
-        get() = if (calendarDates.value.isEmpty()) emptyList() else dataPairs.map { it.first.toFloatDayOfYear() }
-    val yData: List<Float>
-        get() = if (calendarDates.value.isEmpty()) emptyList() else dataPairs.map { it.second.toFloat() }
+
 
     val lastSevenDayAverage: Double
         get() = if (calendarDates.value.isEmpty())  0.0 else calendarDates.value.slice(1..7).map { it.weight }.average()
@@ -40,9 +37,9 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
             delay(150)
 
             try {
-                Log.d("CalendarViewModel", "xData: $xData, yData:$yData")
                 val dates = getDatesWithWeights(today.date)
                 calendarDates.value = dates
+
                 Log.d("CalendarViewModel", "Refreshed calendar dates: $dates")
             } catch (e: Exception) {
                 Log.e("CalendarViewModel", "Error refreshing calendar dates", e)
