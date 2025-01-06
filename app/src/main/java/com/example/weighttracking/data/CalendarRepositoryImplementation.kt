@@ -19,7 +19,10 @@ class CalendarRepositoryImplementation(private val calendarDao: CalendarDao): Ca
 
     override  suspend fun getDatesWithWeights(startDate: LocalDate, daysToSubtract: Int): List<CalendarDate> {
         val endDate = startDate.minusDays(daysToSubtract.toLong())
-        return calendarDao.getDatesWithWeights(startDate, endDate)
+        val result = calendarDao.getDatesWithWeights(startDate, endDate)
+        return result.ifEmpty {
+            List(daysToSubtract) { CalendarDate(endDate.plusDays(it.toLong()), 0.0) }
+        }
     }
 
     override fun getTodaysDate(): LocalDate {

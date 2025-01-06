@@ -71,7 +71,8 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    //Updating this will break the CircularProgressIndicator. As of writing this, it has not been fixed. It is a known issue.
+    implementation("androidx.compose.material3:material3-android:1.2.0-rc01")
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

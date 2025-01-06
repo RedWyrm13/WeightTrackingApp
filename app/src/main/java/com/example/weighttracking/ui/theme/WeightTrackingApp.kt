@@ -1,6 +1,5 @@
 package com.example.weighttracking.ui.theme
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,12 +8,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -120,24 +121,32 @@ fun CalendarItem(dayViewModel: DayViewModel){
 
 @Composable
 fun Calendar(calendarViewModel: CalendarViewModel) {
-    val viewModelStoreOwner = LocalViewModelStoreOwner.current
-        ?: throw IllegalStateException("ViewModelStoreOwner is not available.")
-
-    val listState = rememberLazyListState()
-
+    val isLoading by calendarViewModel.isLoading
     val calendarDates = calendarViewModel.calendarDates
-    Log.d("My Tag1", "calendarDates: $calendarDates")
 
+    if (isLoading) {
+        CircularProgressIndicator(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center)
+        )
+    } else {
+        val viewModelStoreOwner = LocalViewModelStoreOwner.current
+            ?: throw IllegalStateException("ViewModelStoreOwner is not available.")
 
-    LazyRow(state = listState) {
-        items(items = calendarDates) { date ->
-            val dayViewModel = remember(date) {
-                createDayViewModelForDay(AppViewModelProvider.Factory, viewModelStoreOwner, date)
+        val listState = rememberLazyListState()
+
+        LazyRow(state = listState) {
+            items(items = calendarDates) { date ->
+                val dayViewModel = remember(date) {
+                    createDayViewModelForDay(AppViewModelProvider.Factory, viewModelStoreOwner, date)
+                }
+                CalendarItem(dayViewModel = dayViewModel)
             }
-            CalendarItem(dayViewModel = dayViewModel)
         }
     }
 }
+
 
 
 @Composable
