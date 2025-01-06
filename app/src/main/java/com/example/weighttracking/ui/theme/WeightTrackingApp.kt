@@ -118,7 +118,7 @@ fun TopRowContent(calendarViewModel: CalendarViewModel, screenViewModel: ScreenV
         Column {
         Header(screenViewModel = screenViewModel)
         Calendar(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
-        ButtonBox(screenViewModel = screenViewModel)
+        ButtonBox(screenViewModel = screenViewModel, calendarViewModel = calendarViewModel)
     }
 }
 
@@ -206,7 +206,8 @@ fun Calendar(calendarViewModel: CalendarViewModel, screenViewModel: ScreenViewMo
 }
 
 @Composable
-fun ButtonBox(screenViewModel: ScreenViewModel) {
+fun ButtonBox(screenViewModel: ScreenViewModel,
+              calendarViewModel: CalendarViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -222,7 +223,9 @@ fun ButtonBox(screenViewModel: ScreenViewModel) {
         )
         Button(onClick = {
             screenViewModel.updateWeight(screenViewModel.weightInput.toDouble())
+            calendarViewModel.refreshCalendar()
             screenViewModel.weightInput = ""
+
         },
             enabled = if (screenViewModel.weightInput.isNotEmpty()) true else false) {
             Text("Save Weight")
