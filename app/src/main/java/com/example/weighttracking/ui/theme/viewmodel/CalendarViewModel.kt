@@ -28,6 +28,9 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
     val weightedAverages: List<List<CalendarDate>>
         get() = calendarDates.value.sliceIntoParts(7)
 
+    val lastSevenDayAverage: Double
+        get() = calendarDates.value.slice(1..7).map { it.weight }.average()
+
     fun refreshCalendar() {
         viewModelScope.launch {
             delay(150)
