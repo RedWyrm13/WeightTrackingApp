@@ -26,10 +26,10 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
     var calendarDates = mutableStateOf<List<CalendarDate>>(emptyList())
         private set
     val weightedAverages: List<List<CalendarDate>>
-        get() = calendarDates.value.sliceIntoParts(7)
+        get() = if (calendarDates.value.isEmpty())  emptyList() else calendarDates.value.sliceIntoParts(7)
 
     val lastSevenDayAverage: Double
-        get() = calendarDates.value.slice(1..7).map { it.weight }.average()
+        get() = if (calendarDates.value.isEmpty())  0.0 else calendarDates.value.slice(1..7).map { it.weight }.average()
 
     fun refreshCalendar() {
         viewModelScope.launch {

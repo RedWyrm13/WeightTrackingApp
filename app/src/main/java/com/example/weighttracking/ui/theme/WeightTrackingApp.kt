@@ -29,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
@@ -40,7 +39,6 @@ import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModel
 import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModelFactory
 import com.example.weighttracking.ui.theme.viewmodel.ScreenViewModel
 import com.example.weighttracking.ui.theme.viewmodel.ScreenViewModelFactory
-import kotlinx.coroutines.delay
 import java.time.LocalDate
 
 
@@ -107,19 +105,25 @@ fun CalendarApp(
 
     Column(modifier = modifier
         .fillMaxSize()
-        .safeDrawingPadding(),
+        .safeDrawingPadding()
+        .padding(top = 12.dp),
 
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center) {
-        TopRowContent(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
+        verticalArrangement = Arrangement.Top) {
+        Header(screenViewModel = screenViewModel)
+        Calendar(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
+        WeightApp(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
     }
 }
 @Composable
-fun TopRowContent(calendarViewModel: CalendarViewModel, screenViewModel: ScreenViewModel) {
-        Column {
-        Header(screenViewModel = screenViewModel)
-        Calendar(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
-        ButtonBox(screenViewModel = screenViewModel, calendarViewModel = calendarViewModel)
+fun WeightApp(calendarViewModel: CalendarViewModel, screenViewModel: ScreenViewModel) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text("Last 7 days average: ${calendarViewModel.lastSevenDayAverage} lbs")
+
+            ButtonBox(screenViewModel = screenViewModel, calendarViewModel = calendarViewModel)
     }
 }
 
@@ -140,7 +144,7 @@ fun CalendarItem(
            .padding(vertical = 4.dp, horizontal = 4.dp)
            .clickable {
                screenViewModel.selectedDate = calendarDate
-                      },
+           },
            colors= if (isSelected){
                CardDefaults.cardColors(containerColor = Color.Black)
 
@@ -236,13 +240,7 @@ fun ButtonBox(screenViewModel: ScreenViewModel,
     }
 }
 
-
-
-
-
-@Preview(showSystemUi = true)
 @Composable
-fun WeightAppPreview() {
-    WeightTrackingApp()
-}
+fun Graph(screenViewModel: ScreenViewModel, calendarViewModel: CalendarViewModel){
 
+}
