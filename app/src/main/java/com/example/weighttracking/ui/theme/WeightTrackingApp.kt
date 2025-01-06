@@ -103,6 +103,7 @@ fun CalendarApp(
     modifier: Modifier = Modifier) {
 
 
+
     Column(modifier = modifier
         .fillMaxSize()
         .safeDrawingPadding()
@@ -240,7 +241,4 @@ fun ButtonBox(screenViewModel: ScreenViewModel,
     }
 }
 
-@Composable
-fun Graph(screenViewModel: ScreenViewModel, calendarViewModel: CalendarViewModel){
 
-}

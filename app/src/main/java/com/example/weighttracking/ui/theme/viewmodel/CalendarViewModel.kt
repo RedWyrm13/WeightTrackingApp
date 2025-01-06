@@ -25,8 +25,12 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
 
     var calendarDates = mutableStateOf<List<CalendarDate>>(emptyList())
         private set
-    val weightedAverages: List<List<CalendarDate>>
-        get() = if (calendarDates.value.isEmpty())  emptyList() else calendarDates.value.sliceIntoParts(7)
+    val dataPairs: List<Pair<String, Double>>
+        get() = if (calendarDates.value.isEmpty()) emptyList() else getData(calendarDates.value)
+    val xData: List<Float>
+        get() = if (calendarDates.value.isEmpty()) emptyList() else dataPairs.map { it.first.toFloatDayOfYear() }
+    val yData: List<Float>
+        get() = if (calendarDates.value.isEmpty()) emptyList() else dataPairs.map { it.second.toFloat() }
 
     val lastSevenDayAverage: Double
         get() = if (calendarDates.value.isEmpty())  0.0 else calendarDates.value.slice(1..7).map { it.weight }.average()
@@ -36,6 +40,7 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
             delay(150)
 
             try {
+                Log.d("CalendarViewModel", "xData: $xData, yData:$yData")
                 val dates = getDatesWithWeights(today.date)
                 calendarDates.value = dates
                 Log.d("CalendarViewModel", "Refreshed calendar dates: $dates")
@@ -44,10 +49,18 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
             }
         }
     }
-    fun <T> List<T>.sliceIntoParts(size: Int): List<List<T>> {
-        val listCopy = this.slice(1..this.size)
-        return listCopy.chunked(size)
+    fun getData(list: List<CalendarDate>): List<Pair<String, Double>> {
+        val slices = getSlices(list)
+        return slices.map { slice ->
+            val oldestDate = slice.minByOrNull { it.date }?.date?.toString() ?: "Unknown"
+            val averageWeight = slice.map { it.weight }.average()
+            Pair(oldestDate, averageWeight)
+        }
     }
+    fun getSlices(list: List<CalendarDate>): List<List<CalendarDate>> {
+        return list.slice(1 until list.size).chunked(7)
+    }
+
 
     init {
         viewModelScope.launch {
@@ -61,6 +74,13 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
             }
         }
     }
+}
 
 
+
+
+// Extension function to convert ISO date string to a Float (e.g., day of the year)
+fun String.toFloatDayOfYear(): Float {
+    val localDate = LocalDate.parse(this)
+    return localDate.dayOfYear.toFloat() // Using day of the year as a proxy for the date
 }
