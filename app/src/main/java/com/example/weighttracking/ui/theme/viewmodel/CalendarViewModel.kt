@@ -25,6 +25,8 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
 
     var calendarDates = mutableStateOf<List<CalendarDate>>(emptyList())
         private set
+    val weightedAverages: List<List<CalendarDate>>
+        get() = calendarDates.value.sliceIntoParts(7)
 
     fun refreshCalendar() {
         viewModelScope.launch {
@@ -38,6 +40,10 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
                 Log.e("CalendarViewModel", "Error refreshing calendar dates", e)
             }
         }
+    }
+    fun <T> List<T>.sliceIntoParts(size: Int): List<List<T>> {
+        val listCopy = this.slice(1..this.size)
+        return listCopy.chunked(size)
     }
 
     init {
