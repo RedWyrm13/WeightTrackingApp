@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -220,6 +221,9 @@ fun ButtonBox(screenViewModel: ScreenViewModel) {
             label = { Text("Weight") }, // Label shown above the text field
             placeholder = { Text("Enter weight") }, // Hint text
         )
+        Button(onClick = { screenViewModel.updateWeight(screenViewModel.weightInput.toDouble()) }) {
+            Text("Save Weight")
+        }
     }
 }
 
