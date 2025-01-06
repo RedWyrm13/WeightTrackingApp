@@ -11,7 +11,7 @@ interface CalendarRepository {
     suspend fun getWeightForDate(date: LocalDate): CalendarDate?
 
     // This gets all the dates and weights in the specified range, which is 60 days
-    suspend fun getDatesWithWeights(startDate: LocalDate, daysToSubtract: Int = 60): List<CalendarDate>
+    suspend fun getDatesWithWeights(startDate: LocalDate, daysToSubtract: Int = 63): List<CalendarDate>
 
 
 

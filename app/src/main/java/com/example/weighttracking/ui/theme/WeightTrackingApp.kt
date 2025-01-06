@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -115,13 +116,14 @@ fun CalendarItem(
     //Abbreviation for the day of the week
     val abb = AbbreviatedDay.fromDayOfWeek(calendarDate.date.dayOfWeek.value)
     val dayOfMonth = calendarDate.date.dayOfMonth.toString()
+    var color = Color.Black
 
     Card(
        modifier = Modifier
            .padding(vertical = 4.dp, horizontal = 4.dp)
            .clickable { onCardClick() },
            colors= if (isSelected){
-               CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+               CardDefaults.cardColors(containerColor = Color.Black)
            } else {
                CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
            },
@@ -135,19 +137,27 @@ fun CalendarItem(
                 .height(72.dp)
                 .padding(4.dp)
         ){
+            if (isSelected){
+                color = Color.White
+            }
 
             Text(text = abb.day,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.bodySmall)
+                style = MaterialTheme.typography.bodySmall,
+                color = color)
 
             Text(text = dayOfMonth,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.bodyMedium)
+                style = MaterialTheme.typography.bodyMedium,
+                color = color)
+
 
 
             Text(text = "${calendarDate.weight}",
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.bodySmall)
+                style = MaterialTheme.typography.bodySmall,
+                color = color)
+
         }
     }
 
