@@ -40,6 +40,7 @@ import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModel
 import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModelFactory
 import com.example.weighttracking.ui.theme.viewmodel.ScreenViewModel
 import com.example.weighttracking.ui.theme.viewmodel.ScreenViewModelFactory
+import kotlinx.coroutines.delay
 import java.time.LocalDate
 
 
@@ -139,7 +140,6 @@ fun CalendarItem(
            .padding(vertical = 4.dp, horizontal = 4.dp)
            .clickable {
                screenViewModel.selectedDate = calendarDate
-               screenViewModel.fetchWeightForDate(screenViewModel.selectedDate.date)
                       },
            colors= if (isSelected){
                CardDefaults.cardColors(containerColor = Color.Black)
@@ -172,6 +172,7 @@ fun CalendarItem(
 
 
 
+           if (calendarDate.weight != 0.0)
             Text(text = "${calendarDate.weight}",
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.bodySmall,
@@ -227,7 +228,6 @@ fun ButtonBox(screenViewModel: ScreenViewModel,
             screenViewModel.updateWeight(screenViewModel.weightInput.toDouble())
             calendarViewModel.refreshCalendar()
             screenViewModel.weightInput = ""
-            screenViewModel.fetchWeightForDate(screenViewModel.selectedDate.date)
 
         },
             enabled = if (screenViewModel.weightInput.isNotEmpty()) true else false) {

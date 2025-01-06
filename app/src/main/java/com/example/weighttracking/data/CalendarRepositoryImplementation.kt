@@ -31,7 +31,5 @@ class CalendarRepositoryImplementation(private val calendarDao: CalendarDao): Ca
 
         return fullList
     }
-
-
     val today = CalendarDate()
 }

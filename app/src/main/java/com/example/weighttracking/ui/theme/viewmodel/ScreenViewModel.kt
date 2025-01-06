@@ -1,6 +1,5 @@
 package com.example.weighttracking.ui.theme.viewmodel
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -37,18 +36,7 @@ class ScreenViewModel(private val calendarRepositoryImplementation: CalendarRepo
         }
     }
 
-    private val _selectedDateWeight = mutableStateOf<Double?>(null)
-    val selectedDateWeight: MutableState<Double?> get() = _selectedDateWeight // Immutable reference for the UI
-
-    fun fetchWeightForDate(date: LocalDate) {
-        viewModelScope.launch {
-            val calendarDate = calendarRepositoryImplementation.getWeightForDate(date)
-            _selectedDateWeight.value = calendarDate?.weight
-        }
-    }
 // This is run upon initialization of the viewmodel
-
-
 
     init {
         viewModelScope.launch {

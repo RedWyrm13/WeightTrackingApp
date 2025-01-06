@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weighttracking.data.CalendarDate
 import com.example.weighttracking.data.CalendarRepositoryImplementation
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -27,6 +28,8 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
 
     fun refreshCalendar() {
         viewModelScope.launch {
+            delay(150)
+
             try {
                 val dates = getDatesWithWeights(today.date)
                 calendarDates.value = dates
