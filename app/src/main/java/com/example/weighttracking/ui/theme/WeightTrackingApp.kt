@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -111,25 +112,26 @@ fun TopRowContent(calendarViewModel: CalendarViewModel, screenViewModel: ScreenV
 @Composable
 fun CalendarItem(
     calendarDate: CalendarDate,
-    isSelected: Boolean,
-    onCardClick: () -> Unit = {}){
+    screenViewModel: ScreenViewModel){
     //Abbreviation for the day of the week
     val abb = AbbreviatedDay.fromDayOfWeek(calendarDate.date.dayOfWeek.value)
     val dayOfMonth = calendarDate.date.dayOfMonth.toString()
+
+    val isSelected = calendarDate.date == screenViewModel.selectedDate?.date
     var color = Color.Black
 
     Card(
        modifier = Modifier
            .padding(vertical = 4.dp, horizontal = 4.dp)
-           .clickable { onCardClick() },
+           .clickable { screenViewModel.selectedDate = calendarDate },
            colors= if (isSelected){
                CardDefaults.cardColors(containerColor = Color.Black)
+
            } else {
-               CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+               CardDefaults.cardColors(containerColor = Color.Transparent)
+
            },
-        elevation = if (isSelected) CardDefaults.cardElevation(8.dp) else CardDefaults.cardElevation(2.dp),
-
-
+        shape= CircleShape,
     ){
         Column(
             modifier = Modifier
@@ -181,8 +183,7 @@ fun Calendar(calendarViewModel: CalendarViewModel, screenViewModel: ScreenViewMo
     else{
         LazyRow(state = listState) {
             items(items = calendarDates.reversed()) { date ->
-                val isSelected = !(date ==screenViewModel.selectedDate)
-                CalendarItem(calendarDate = date, isSelected = isSelected)
+                CalendarItem(calendarDate = date, screenViewModel= screenViewModel)
             }
         }
 

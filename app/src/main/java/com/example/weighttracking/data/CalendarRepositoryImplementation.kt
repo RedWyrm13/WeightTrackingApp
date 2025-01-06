@@ -27,8 +27,9 @@ class CalendarRepositoryImplementation(private val calendarDao: CalendarDao): Ca
     private fun createList(): List<CalendarDate> {
         return List(64) { index ->
             val date = today.date.minusDays(index -1.toLong())
+            val weight = index.toDouble() * 2.0
             Log.d("CreateList", "Generated date: $date")
-            CalendarDate(date, 0.0)
+            CalendarDate(date, weight)
         }
     }
 
