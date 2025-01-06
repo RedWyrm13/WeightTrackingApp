@@ -23,7 +23,8 @@ class ScreenViewModel(private val calendarRepositoryImplementation: CalendarRepo
     private val weight: Double
             get() = selectedDate.weight
 
-    val formattedDate = selectedDate.date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"))
+    val formattedDate: String
+            get() = selectedDate.date.format(DateTimeFormatter.ofPattern("MMMM d, yyyy"))
 
     //Add weight to database on button click from composable
     fun updateWeight(weight: Double) {
