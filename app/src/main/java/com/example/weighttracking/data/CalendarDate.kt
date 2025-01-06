@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter
 @Entity(tableName = "calendar_dates")
 data class CalendarDate(
     @PrimaryKey
-    val date: LocalDate = LocalDate.now(),
+    val date: LocalDate =LocalDate.now(),
     val weight: Double = 0.0
     )
 

@@ -13,8 +13,7 @@ interface CalendarRepository {
     // This gets all the dates and weights in the specified range, which is 60 days
     suspend fun getDatesWithWeights(startDate: LocalDate, daysToSubtract: Int = 60): List<CalendarDate>
 
-    // Gets today's date
-    fun getTodaysDate(): LocalDate
+
 
 
 }

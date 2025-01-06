@@ -31,34 +31,25 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
     }
 
 
-    var calendarDates: List<CalendarDate> = emptyList()
+    var calendarDates = mutableStateOf<List<CalendarDate>>(emptyList())
         private set
-
-
 
     init {
         viewModelScope.launch {
             try {
-                val safeDaysToSubtract = 60.coerceAtMost(today.date.dayOfYear - 1) // Adjust as needed
-                calendarDates = getDatesWithWeights(today.date, safeDaysToSubtract)
-                if (calendarDates.isEmpty()) {
-                    calendarDates = List(60) { CalendarDate(today.date.minusDays(it.toLong()), 0.0) }
-                }
+                Log.d("Calendar Try Statement", "Trying to get dates with weights")
+                val safeDaysToSubtract = 60.coerceAtMost(today.date.dayOfYear - 1)
+                val dates = getDatesWithWeights(today.date, safeDaysToSubtract)
+                Log.d("CalendarViewModel", "Fetched dates: $dates")
+                calendarDates.value = dates
             } catch (e: Exception) {
                 Log.e("CalendarViewModel", "Error initializing calendar dates", e)
+                calendarDates.value = emptyList() // Provide a fallback
             } finally {
                 isLoading.value = false
             }
         }
     }
 
-
-    fun getDateRange(startDate: LocalDate, endDate: LocalDate): List<LocalDate> {
-        require(!startDate.isAfter(endDate)) { "Start date must be before or equal to end date" }
-
-        return generateSequence(startDate) { date ->
-            if (date.isBefore(endDate)) date.plusDays(1) else null
-        }.toList()
-    }
 
 }

@@ -1,5 +1,6 @@
 package com.example.weighttracking.data
 
+import android.util.Log
 import java.time.LocalDate
 
 class CalendarRepositoryImplementation(private val calendarDao: CalendarDao): CalendarRepository {
@@ -17,17 +18,22 @@ class CalendarRepositoryImplementation(private val calendarDao: CalendarDao): Ca
     }
 
 
-    override  suspend fun getDatesWithWeights(startDate: LocalDate, daysToSubtract: Int): List<CalendarDate> {
+    override suspend fun getDatesWithWeights(startDate: LocalDate, daysToSubtract: Int): List<CalendarDate> {
         val endDate = startDate.minusDays(daysToSubtract.toLong())
         val result = calendarDao.getDatesWithWeights(startDate, endDate)
-        return result.ifEmpty {
-            List(60) { CalendarDate(LocalDate.now(), 0.0) }
+        return result.ifEmpty { createList() }
+    }
+
+    private fun createList(): List<CalendarDate> {
+        return List(7) { index ->
+            val date = today.date.minusDays(index.toLong())
+            Log.d("CreateList", "Generated date: $date")
+            CalendarDate(date, 0.0)
         }
     }
 
-    override fun getTodaysDate(): LocalDate {
-        return LocalDate.now()
-    }
-    val today = CalendarDate(LocalDate.now(), 0.0)
+
+
+    val today = CalendarDate()
     val selectedDay: CalendarDate = today
 }

@@ -1,3 +1,4 @@
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -10,8 +11,11 @@ class DayViewModelFactory(
     private val repository: CalendarRepositoryImplementation,
     private val calendarDay: CalendarDate
 ) : ViewModelProvider.Factory {
+
     @Suppress("UNCHECKED_CAST")
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
+
         if (modelClass.isAssignableFrom(DayViewModel::class.java)) {
             return DayViewModel(repository, calendarDay) as T
         }
@@ -37,9 +41,7 @@ fun createDayViewModelForDay(
     owner: ViewModelStoreOwner,
     calendarDay: CalendarDate
 ): DayViewModel {
-    // Create a specific factory for DayViewModel
     val factory = DayViewModelFactory(repository, calendarDay)
-
-    // Use ViewModelProvider to get DayViewModel
-    return ViewModelProvider(owner, factory)[DayViewModel::class.java]
+    return ViewModelProvider(owner, factory)
+        .get("DayViewModel_${calendarDay.date}", DayViewModel::class.java)
 }

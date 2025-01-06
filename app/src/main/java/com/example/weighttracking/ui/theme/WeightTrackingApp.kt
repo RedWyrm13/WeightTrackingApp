@@ -43,7 +43,6 @@ import createDayViewModelForDay
 
 @Composable
 fun WeightTrackingApp() {
-    Log.d("CalendarViewModel", "Creating CalendarViewModel")
 
     // Get the repository from the application context
     val repository = LocalContext.current.applicationContext
@@ -100,7 +99,10 @@ fun TopRowContent(calendarViewModel: CalendarViewModel){
 
 @Composable
 fun CalendarItem(dayViewModel: DayViewModel){
+
     val calendarDate = dayViewModel.date
+    Log.d("CalendarItem", "Date passed to CalendarItem: $calendarDate")
+
     Card(
        modifier = Modifier
            .padding(vertical = 4.dp, horizontal = 4.dp),
@@ -138,7 +140,8 @@ fun CalendarItem(dayViewModel: DayViewModel){
 @Composable
 fun Calendar(calendarViewModel: CalendarViewModel) {
     val isLoading by calendarViewModel.isLoading
-    val calendarDates = calendarViewModel.calendarDates
+    val calendarDates = calendarViewModel.calendarDates.value // Access the value of mutableStateOf
+    Log.d("CalendarDates", "${calendarDates}")
 
     if (isLoading) {
         CircularProgressIndicator(
@@ -157,15 +160,15 @@ fun Calendar(calendarViewModel: CalendarViewModel) {
 
         LazyRow(state = listState) {
             items(items = calendarDates) { date ->
-                val dayViewModel = remember(date) {
-                    createDayViewModelForDay(repository, viewModelStoreOwner, date)
-                }
-                Log.d("Calendar", "$calendarDates")
+                Log.d("LazyRowDate", "Date passed to LazyRow: $date")
+                val dayViewModel = createDayViewModelForDay(repository, viewModelStoreOwner, date)
                 CalendarItem(dayViewModel = dayViewModel)
             }
         }
+
     }
 }
+
 
 
 @Composable
