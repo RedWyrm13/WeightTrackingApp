@@ -53,7 +53,7 @@ android {
 
 dependencies {
     //Graph making
-    implementation (libs.mpandroidchart)
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     // Rooms Components
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.core.ktx)
