@@ -20,22 +20,18 @@ class CalendarRepositoryImplementation(private val calendarDao: CalendarDao): Ca
 
     override suspend fun getDatesWithWeights(startDate: LocalDate, daysToSubtract: Int): List<CalendarDate> {
         val endDate = startDate.minusDays(daysToSubtract.toLong())
-        val result = calendarDao.getDatesWithWeights(endDate, startDate)
-        Log.d("CalendarRepository", "getDatesWithWeights: $result")
-        Log.d("CalendarRepository", "StartDate: $startDate")
-        Log.d("CalendarRepository", "EndDate: $endDate")
+        val dbResults = calendarDao.getDatesWithWeights(endDate, startDate).associateBy { it.date }
 
-        return result.ifEmpty { createList() }
-    }
-
-    private fun createList(): List<CalendarDate> {
-        return List(64) { index ->
-            val date = today.date.minusDays(index -1.toLong())
-            val weight = index.toDouble() * 2.0
-            Log.d("CreateList", "Generated date: $date")
-            CalendarDate(date, weight)
+        // Create a complete list of dates from today to the last 62 days
+        val fullList = (0..62).map { index ->
+            val date = startDate.minusDays(index.toLong() - 1)
+            // If a date exists in the database results, use it; otherwise, create a default entry
+            dbResults[date] ?: CalendarDate(date, 0.0)
         }
+
+        return fullList
     }
+
 
     val today = CalendarDate()
 }

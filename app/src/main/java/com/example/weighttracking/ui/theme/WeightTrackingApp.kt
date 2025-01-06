@@ -233,7 +233,6 @@ fun ButtonBox(screenViewModel: ScreenViewModel,
             enabled = if (screenViewModel.weightInput.isNotEmpty()) true else false) {
             Text("Save Weight")
         }
-        Text(screenViewModel.selectedDateWeight.value.toString())
     }
 }
 
