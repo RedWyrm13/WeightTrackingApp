@@ -1,57 +1,45 @@
-package com.example.weighttracking.ui.theme.viewmodel
-
-import android.app.Application
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.viewmodel.CreationExtras
-import androidx.lifecycle.viewmodel.MutableCreationExtras
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.weighttracking.WeightTrackingApplication
 import com.example.weighttracking.data.CalendarDate
+import com.example.weighttracking.data.CalendarRepositoryImplementation
+import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModel
+import com.example.weighttracking.ui.theme.viewmodel.DayViewModel
 
-object AppViewModelProvider {
-
-    val Factory = viewModelFactory {
-        // Initializer for DayViewModel for a specific day
-        initializer {
-            val calendarRepository = weightTrackingApplication().calendarRepository
-            val calendarDay = this[CreationExtrasKey.CalendarDay]
-                ?: throw IllegalArgumentException("CalendarDay must be provided.")
-            DayViewModel(calendarRepository, calendarDay)
+class DayViewModelFactory(
+    private val repository: CalendarRepositoryImplementation,
+    private val calendarDay: CalendarDate
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(DayViewModel::class.java)) {
+            return DayViewModel(repository, calendarDay) as T
         }
-
-        // Initializer for CalendarViewModel
-        initializer {
-            val calendarRepository = weightTrackingApplication().calendarRepository
-            CalendarViewModel(calendarRepository)
-        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
 
-/**
- * Custom key to provide a unique CalendarDay to the ViewModel initializer.
- */
-object CreationExtrasKey {
-    val CalendarDay = object : CreationExtras.Key<CalendarDate> {}
+
+class CalendarViewModelFactory(
+    private val repository: CalendarRepositoryImplementation
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(CalendarViewModel::class.java)) {
+            return CalendarViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }
 
-/**
- * Extension function to query for [Application] object and return an instance of
- * [WeightTrackingApplication].
- */
-fun CreationExtras.weightTrackingApplication(): WeightTrackingApplication =
-    (this[AndroidViewModelFactory.APPLICATION_KEY] as WeightTrackingApplication)
-
-
 fun createDayViewModelForDay(
-    factory: ViewModelProvider.Factory,
+    repository: CalendarRepositoryImplementation,
     owner: ViewModelStoreOwner,
     calendarDay: CalendarDate
 ): DayViewModel {
-    val extras = MutableCreationExtras().apply {
-        this[CreationExtrasKey.CalendarDay] = calendarDay
-    }
-    return ViewModelProvider(owner.viewModelStore, factory, extras)[DayViewModel::class.java]
+    // Create a specific factory for DayViewModel
+    val factory = DayViewModelFactory(repository, calendarDay)
+
+    // Use ViewModelProvider to get DayViewModel
+    return ViewModelProvider(owner, factory)[DayViewModel::class.java]
 }

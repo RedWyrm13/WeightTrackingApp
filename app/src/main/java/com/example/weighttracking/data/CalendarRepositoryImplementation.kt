@@ -21,7 +21,7 @@ class CalendarRepositoryImplementation(private val calendarDao: CalendarDao): Ca
         val endDate = startDate.minusDays(daysToSubtract.toLong())
         val result = calendarDao.getDatesWithWeights(startDate, endDate)
         return result.ifEmpty {
-            List(daysToSubtract) { CalendarDate(endDate.plusDays(it.toLong()), 0.0) }
+            List(60) { CalendarDate(LocalDate.now(), 0.0) }
         }
     }
 

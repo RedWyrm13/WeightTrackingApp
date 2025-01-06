@@ -1,5 +1,7 @@
 package com.example.weighttracking.ui.theme
 
+import CalendarViewModelFactory
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,26 +28,40 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weighttracking.R
-import com.example.weighttracking.ui.theme.viewmodel.AppViewModelProvider
+import com.example.weighttracking.WeightTrackingApplication
 import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModel
 import com.example.weighttracking.ui.theme.viewmodel.DayViewModel
-import com.example.weighttracking.ui.theme.viewmodel.createDayViewModelForDay
+import createDayViewModelForDay
 
 
 @Composable
-fun WeightTrackingApp(){
+fun WeightTrackingApp() {
+    Log.d("CalendarViewModel", "Creating CalendarViewModel")
 
-    val calendarViewModel: CalendarViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    // Get the repository from the application context
+    val repository = LocalContext.current.applicationContext
+        .let { it as WeightTrackingApplication }.calendarRepository
+
+    // Get the ViewModelStoreOwner (typically the current composable's context)
+    val viewModelStoreOwner = LocalViewModelStoreOwner.current
+        ?: throw IllegalStateException("ViewModelStoreOwner is not available.")
+
+    // Use ViewModelProvider with the custom CalendarViewModelFactory
+    val calendarViewModel: CalendarViewModel = remember {
+        ViewModelProvider(viewModelStoreOwner, CalendarViewModelFactory(repository))
+            .get(CalendarViewModel::class.java)
+    }
 
     CalendarApp(calendarViewModel = calendarViewModel)
-
 }
+
 
 @Composable
 fun Header(calendarViewModel: CalendarViewModel) {
@@ -134,19 +150,22 @@ fun Calendar(calendarViewModel: CalendarViewModel) {
         val viewModelStoreOwner = LocalViewModelStoreOwner.current
             ?: throw IllegalStateException("ViewModelStoreOwner is not available.")
 
+        val repository = LocalContext.current.applicationContext
+            .let { it as WeightTrackingApplication }.calendarRepository
+
         val listState = rememberLazyListState()
 
         LazyRow(state = listState) {
             items(items = calendarDates) { date ->
                 val dayViewModel = remember(date) {
-                    createDayViewModelForDay(AppViewModelProvider.Factory, viewModelStoreOwner, date)
+                    createDayViewModelForDay(repository, viewModelStoreOwner, date)
                 }
+                Log.d("Calendar", "$calendarDates")
                 CalendarItem(dayViewModel = dayViewModel)
             }
         }
     }
 }
-
 
 
 @Composable
