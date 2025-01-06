@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -142,6 +143,8 @@ fun CalendarItem(
     var color = Color.Black
 
 
+
+
     Card(
        modifier = Modifier
            .padding(vertical = 4.dp, horizontal = 4.dp)
@@ -205,7 +208,11 @@ fun Calendar(calendarViewModel: CalendarViewModel, screenViewModel: ScreenViewMo
                 .wrapContentSize(Alignment.Center)
         )
     }
+
     else{
+        LaunchedEffect(Unit) {
+            listState.scrollToItem(calendarDates.size - 1)
+        }
         LazyRow(state = listState) {
             items(items = calendarDates.reversed()) { date ->
                 CalendarItem(calendarDate = date, screenViewModel= screenViewModel)
