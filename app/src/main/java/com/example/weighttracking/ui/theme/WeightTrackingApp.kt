@@ -1,6 +1,6 @@
 package com.example.weighttracking.ui.theme
 
-import CalendarViewModelFactory
+import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModelFactory
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,7 +52,7 @@ fun WeightTrackingApp() {
     val viewModelStoreOwner = LocalViewModelStoreOwner.current
         ?: throw IllegalStateException("ViewModelStoreOwner is not available.")
 
-    // Use ViewModelProvider with the custom CalendarViewModelFactory
+    // Use ViewModelProvider with the custom com.example.weighttracking.ui.theme.viewmodel.CalendarViewModelFactory
     val calendarViewModel: CalendarViewModel = remember {
         ViewModelProvider(viewModelStoreOwner, CalendarViewModelFactory(repository))
             .get(CalendarViewModel::class.java)

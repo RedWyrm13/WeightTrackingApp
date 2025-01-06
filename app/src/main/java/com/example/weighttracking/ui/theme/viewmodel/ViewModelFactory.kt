@@ -1,8 +1,7 @@
-
+package com.example.weighttracking.ui.theme.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.weighttracking.data.CalendarRepositoryImplementation
-import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModel
 
 
 class CalendarViewModelFactory(
