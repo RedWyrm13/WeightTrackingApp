@@ -11,12 +11,12 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class ScreenViewModel(private val calendarRepositoryImplementation: CalendarRepositoryImplementation): ViewModel() {
-    lateinit var today: CalendarDate
+    // THe following three variables are used in the composable for display
     var selectedDate by mutableStateOf(today)
 
-    val date: LocalDate
+    private val date: LocalDate
             get() = selectedDate.date
-    val weight: Double
+    private val weight: Double
             get() = selectedDate.weight
 
     //Add weight to database on button click from composable
@@ -28,6 +28,8 @@ class ScreenViewModel(private val calendarRepositoryImplementation: CalendarRepo
     }
 
 // This is run upon initialization of the viewmodel
+    lateinit var today: CalendarDate
+
     init {
         viewModelScope.launch {
             today = calendarRepositoryImplementation.getWeightForDate(LocalDate.now()) ?: CalendarDate()
