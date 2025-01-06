@@ -19,7 +19,7 @@ interface CalendarDao {
 
 
     // Gets all the dates and weights in the specified range
-    @Query("SELECT * FROM CALENDAR_DATES where date between :startDate and :endDate")
+    @Query("SELECT * FROM calendar_dates where date between :startDate and :endDate")
      suspend fun getDatesWithWeights(startDate: LocalDate, endDate: LocalDate): List<CalendarDate>
 
 }

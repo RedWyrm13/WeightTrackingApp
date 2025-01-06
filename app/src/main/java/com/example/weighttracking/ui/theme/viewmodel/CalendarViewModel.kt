@@ -40,8 +40,7 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
     init {
         viewModelScope.launch {
             try {
-                val safeDaysToSubtract = 60.coerceAtMost(today.date.dayOfYear - 1)
-                val dates = getDatesWithWeights(today.date, safeDaysToSubtract)
+                val dates = getDatesWithWeights(today.date,)
                 calendarDates.value = dates
             } catch (e: Exception) {
                 calendarDates.value = emptyList() // Provide a fallback
