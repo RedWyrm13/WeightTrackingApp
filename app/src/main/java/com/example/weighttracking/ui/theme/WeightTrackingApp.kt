@@ -124,7 +124,7 @@ fun WeightApp(calendarViewModel: CalendarViewModel, screenViewModel: ScreenViewM
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Last 7 days average: ${calendarViewModel.lastSevenDayAverage} lbs")
+            Text("Last 7 days average: %.2f lbs".format(calendarViewModel.lastSevenDayAverage))
 
             ButtonBox(screenViewModel = screenViewModel, calendarViewModel = calendarViewModel)
     }
