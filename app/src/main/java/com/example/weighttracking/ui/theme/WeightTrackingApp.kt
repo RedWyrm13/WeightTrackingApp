@@ -103,7 +103,6 @@ fun CalendarApp(
     modifier: Modifier = Modifier) {
 
 
-
     Column(modifier = modifier
         .fillMaxSize()
         .safeDrawingPadding()
@@ -114,6 +113,9 @@ fun CalendarApp(
         Header(screenViewModel = screenViewModel)
         Calendar(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
         WeightApp(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
+        if (calendarViewModel.dataPairs.isNotEmpty()) {
+            GraphView(data = calendarViewModel.dataPairs)
+        }
     }
 }
 @Composable

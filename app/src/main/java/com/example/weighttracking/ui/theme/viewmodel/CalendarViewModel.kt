@@ -25,7 +25,7 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
 
     var calendarDates = mutableStateOf<List<CalendarDate>>(emptyList())
         private set
-    val dataPairs: List<Pair<String, Double>>
+    val dataPairs: List<Pair<String, Float>>
         get() = if (calendarDates.value.isEmpty()) emptyList() else getData(calendarDates.value)
     val xData: List<Float>
         get() = if (calendarDates.value.isEmpty()) emptyList() else dataPairs.map { it.first.toFloatDayOfYear() }
@@ -49,12 +49,12 @@ class CalendarViewModel(private val calendarRepositoryImplementation: CalendarRe
             }
         }
     }
-    fun getData(list: List<CalendarDate>): List<Pair<String, Double>> {
+    fun getData(list: List<CalendarDate>): List<Pair<String, Float>> {
         val slices = getSlices(list)
         return slices.map { slice ->
             val oldestDate = slice.minByOrNull { it.date }?.date?.toString() ?: "Unknown"
             val averageWeight = slice.map { it.weight }.average()
-            Pair(oldestDate, averageWeight)
+            Pair(oldestDate, averageWeight.toFloat())
         }
     }
     fun getSlices(list: List<CalendarDate>): List<List<CalendarDate>> {
