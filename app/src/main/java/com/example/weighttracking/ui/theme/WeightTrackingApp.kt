@@ -138,8 +138,7 @@ fun CalendarItem(
        modifier = Modifier
            .padding(vertical = 4.dp, horizontal = 4.dp)
            .clickable {
-               screenViewModel.selectedDate = calendarDate
-               screenViewModel.weightInput = calendarDate.weight.toString()     },
+               screenViewModel.selectedDate = calendarDate},
            colors= if (isSelected){
                CardDefaults.cardColors(containerColor = Color.Black)
 
@@ -221,7 +220,11 @@ fun ButtonBox(screenViewModel: ScreenViewModel) {
             label = { Text("Weight") }, // Label shown above the text field
             placeholder = { Text("Enter weight") }, // Hint text
         )
-        Button(onClick = { screenViewModel.updateWeight(screenViewModel.weightInput.toDouble()) }) {
+        Button(onClick = {
+            screenViewModel.updateWeight(screenViewModel.weightInput.toDouble())
+            screenViewModel.weightInput = ""
+        },
+            enabled = if (screenViewModel.weightInput.isNotEmpty()) true else false) {
             Text("Save Weight")
         }
     }

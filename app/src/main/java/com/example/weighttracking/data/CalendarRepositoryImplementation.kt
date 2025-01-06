@@ -7,8 +7,7 @@ class CalendarRepositoryImplementation(private val calendarDao: CalendarDao): Ca
 
     // THis overrides the interface implementation for recordWeight. It uses the CalendarDao method
     //.recordWeight() to insert the data into the calendar_dates database
-    override suspend fun recordWeight(date: LocalDate, weight: Double) {
-        val calendarDate = CalendarDate(date, weight)
+    override suspend fun recordWeight(calendarDate: CalendarDate) {
         calendarDao.recordWeight(calendarDate)
     }
 

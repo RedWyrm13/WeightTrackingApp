@@ -31,8 +31,8 @@ class ScreenViewModel(private val calendarRepositoryImplementation: CalendarRepo
     //Add weight to database on button click from composable
     fun updateWeight(weight: Double) {
         viewModelScope.launch {
-            calendarRepositoryImplementation.recordWeight(date, weight)
             selectedDate = CalendarDate(date, weight)
+            calendarRepositoryImplementation.recordWeight(selectedDate)
         }
     }
 
