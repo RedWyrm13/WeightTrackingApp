@@ -25,15 +25,12 @@ class CalendarRepositoryImplementation(private val calendarDao: CalendarDao): Ca
     }
 
     private fun createList(): List<CalendarDate> {
-        return List(7) { index ->
+        return List(63) { index ->
             val date = today.date.minusDays(index.toLong())
             Log.d("CreateList", "Generated date: $date")
             CalendarDate(date, 0.0)
         }
     }
 
-
-
     val today = CalendarDate()
-    val selectedDay: CalendarDate = today
 }
