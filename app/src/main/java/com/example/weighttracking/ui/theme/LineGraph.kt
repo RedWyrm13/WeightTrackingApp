@@ -24,7 +24,7 @@ fun GraphView(data: List<Pair<String, Float>>) {
                 this.axisLeft.axisMinimum = 0f // Adjust if needed
                 this.axisRight.isEnabled = false
                 this.description.text = "Average Weight each week for the last 9 weeks"
-                this.description.textSize = 12f
+                this.description.setPosition(this.width / 2f, 1f) // Centered horizontally and near the top                this.description.textSize = 12f
             }
         },
         update = { chart ->
