@@ -52,6 +52,11 @@ android {
 }
 
 dependencies {
+    //Google Authentication
+    implementation ("androidx.credentials:credentials:1.5.0-beta01")
+    implementation ("androidx.credentials:credentials-play-services-auth:1.5.0-beta01")
+    implementation ("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
     //Graph making
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     // Rooms Components
