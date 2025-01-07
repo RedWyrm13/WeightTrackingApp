@@ -36,6 +36,7 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.example.weighttracking.WeightTrackingApplication
 import com.example.weighttracking.data.AbbreviatedDay
 import com.example.weighttracking.data.CalendarDate
+import com.example.weighttracking.googleauthentication.GoogleSignInButton
 import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModel
 import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModelFactory
 import com.example.weighttracking.ui.theme.viewmodel.ScreenViewModel
@@ -104,21 +105,26 @@ fun CalendarApp(
     modifier: Modifier = Modifier) {
 
 
-    Column(modifier = modifier
-        .fillMaxSize()
-        .safeDrawingPadding()
-        .padding(top = 12.dp),
 
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top) {
-        Header(screenViewModel = screenViewModel)
-        Calendar(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
-        WeightApp(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
-        if (calendarViewModel.dataPairs.isNotEmpty()) {
-            GraphView(data = calendarViewModel.dataPairs.reversed())
+
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .safeDrawingPadding()
+                .padding(top = 12.dp),
+
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Header(screenViewModel = screenViewModel)
+            Calendar(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
+            WeightApp(calendarViewModel = calendarViewModel, screenViewModel = screenViewModel)
+            if (calendarViewModel.dataPairs.isNotEmpty()) {
+                GraphView(data = calendarViewModel.dataPairs.reversed())
+            }
         }
     }
-}
+
 @Composable
 fun WeightApp(calendarViewModel: CalendarViewModel, screenViewModel: ScreenViewModel) {
         Column(

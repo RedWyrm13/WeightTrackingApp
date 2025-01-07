@@ -12,6 +12,7 @@ import com.example.weighttracking.data.CalendarRepositoryImplementation
 import com.example.weighttracking.googleauthentication.GoogleSignInButton
 import com.example.weighttracking.ui.theme.WeightTrackingApp
 import com.example.weighttracking.ui.theme.WeightTrackingTheme
+import com.example.weighttracking.ui.theme.viewmodel.UserViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +21,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             WeightTrackingTheme {
                 //WeightTrackingApp()
-                GoogleSignInButton()
+
+                //Delete later
+                val userViewModel = UserViewModel()
+                GoogleSignInButton(userViewModel=userViewModel)
             }
         }
     }
