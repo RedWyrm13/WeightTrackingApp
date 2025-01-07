@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import com.example.weighttracking.data.CalendarDao
 import com.example.weighttracking.data.CalendarDatabase
 import com.example.weighttracking.data.CalendarRepositoryImplementation
+import com.example.weighttracking.googleauthentication.GoogleSignInButton
 import com.example.weighttracking.ui.theme.WeightTrackingApp
 import com.example.weighttracking.ui.theme.WeightTrackingTheme
 
@@ -18,7 +19,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WeightTrackingTheme {
-                WeightTrackingApp()
+                //WeightTrackingApp()
+                GoogleSignInButton()
             }
         }
     }
@@ -39,7 +41,6 @@ class WeightTrackingApplication : Application() {
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
             // Log the uncaught exception
             Log.e("GlobalExceptionHandler", "Unhandled exception in thread: ${thread.name}", throwable)
-
         }
     }
 }
