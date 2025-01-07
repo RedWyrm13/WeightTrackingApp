@@ -1,5 +1,7 @@
 package com.example.weighttracking.googleauthentication
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +30,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import kotlinx.coroutines.launch
 import java.security.SecureRandom
 import java.util.Base64
 
@@ -37,7 +44,38 @@ fun GoogleSignInButton() {
     val coroutineScope = rememberCoroutineScope()
 
     val onClick = {
-        // Handle Google Sign-In
+            val webClientID = "504828019130-03qnqdop8r7u5fce5q3emjf3talgcmjs.apps.googleusercontent.com"
+            val credentialManager = CredentialManager.create(context)
+
+            val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+                .setFilterByAuthorizedAccounts(false)
+                .setServerClientId(webClientID)
+                .setAutoSelectEnabled(true)
+                .setNonce(generateNonce())
+                .build()
+
+            val request = GetCredentialRequest.Builder()
+                .addCredentialOption(googleIdOption)
+                .build()
+
+            coroutineScope.launch {
+                try {
+                    val result = credentialManager.getCredential(
+                        request = request,
+                        context = context
+                    )
+
+                    val credential = result.credential
+                    val googleIdTokenCredential =
+                        GoogleIdTokenCredential.createFrom(credential.data)
+                    val googleIdToken = googleIdTokenCredential.idToken
+
+                    Toast.makeText(context, "You are signed in!", Toast.LENGTH_SHORT).show()
+                    Log.d("GoogleSignInButton", "Google ID token: ${result.credential.data}")
+                } catch (e: Exception) {
+                    Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 
     Column(
@@ -129,5 +167,4 @@ fun generateNonce(length: Int = 16): String {
 @Composable
 fun GoogleSignInButtonPreview() {
         GoogleSignInButton()
-
 }
