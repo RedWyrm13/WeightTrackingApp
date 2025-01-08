@@ -36,7 +36,6 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.example.weighttracking.WeightTrackingApplication
 import com.example.weighttracking.data.AbbreviatedDay
 import com.example.weighttracking.data.CalendarDate
-import com.example.weighttracking.googleauthentication.GoogleSignInButton
 import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModel
 import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModelFactory
 import com.example.weighttracking.ui.theme.viewmodel.ScreenViewModel

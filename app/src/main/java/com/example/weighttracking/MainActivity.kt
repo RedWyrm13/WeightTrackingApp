@@ -9,25 +9,23 @@ import androidx.activity.enableEdgeToEdge
 import com.example.weighttracking.data.CalendarDao
 import com.example.weighttracking.data.CalendarDatabase
 import com.example.weighttracking.data.CalendarRepositoryImplementation
-import com.example.weighttracking.googleauthentication.GoogleSignInButton
 import com.example.weighttracking.ui.theme.WeightTrackingApp
 import com.example.weighttracking.ui.theme.WeightTrackingTheme
-import com.example.weighttracking.ui.theme.viewmodel.UserViewModel
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContent {
-            WeightTrackingTheme {
-                //WeightTrackingApp()
 
-                //Delete later
-                val userViewModel = UserViewModel()
-                GoogleSignInButton(userViewModel=userViewModel)
+
+
+        setContent {
+            WeightTrackingTheme{
+                    WeightTrackingApp()
+                }
             }
         }
-    }
 }
 
 class WeightTrackingApplication : Application() {
