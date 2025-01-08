@@ -60,6 +60,8 @@ dependencies {
     //noinspection UseTomlInstead
     implementation ("com.google.android.libraries.identity.googleid:googleid:1.1.1")
 
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
     //Graph making
     //noinspection UseTomlInstead
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
