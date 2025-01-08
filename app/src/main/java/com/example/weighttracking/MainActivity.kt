@@ -9,7 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import com.example.weighttracking.data.CalendarDao
 import com.example.weighttracking.data.CalendarDatabase
 import com.example.weighttracking.data.CalendarRepositoryImplementation
-import com.example.weighttracking.ui.theme.WeightTrackingApp
+import com.example.weighttracking.navigation.WeightTrackingApp
 import com.example.weighttracking.ui.theme.WeightTrackingTheme
 
 class MainActivity : ComponentActivity() {
