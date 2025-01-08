@@ -81,12 +81,7 @@ fun CurrentWeightTextFIeld(userViewModel: UserViewModel) {
     val weightInput = userViewModel.currentWeightInput
     val onWeightChange = {newWeight: String -> userViewModel.currentWeightInput = newWeight}
     val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = remember { FocusRequester() }
 
-    LaunchedEffect(Unit){
-        focusRequester.requestFocus()
-        keyboardController?.show()
-    }
 
     TextField(
         value = weightInput,
@@ -105,7 +100,6 @@ fun CurrentWeightTextFIeld(userViewModel: UserViewModel) {
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         ),
-        modifier = Modifier.focusRequester(focusRequester)
     )
 }
 
