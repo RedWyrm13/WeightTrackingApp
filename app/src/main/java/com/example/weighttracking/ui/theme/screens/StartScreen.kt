@@ -20,15 +20,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
@@ -138,7 +135,9 @@ fun ButtonsForSignIn(userViewModel: UserViewModel, onSignInButtonClicked: () -> 
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Button(
-            onClick = {},
+            onClick = {
+                onSignInButtonClicked()
+            },
             enabled = isEnabled, // Dynamically enable/disable based on input
             modifier = Modifier.width(200.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan)
@@ -146,7 +145,10 @@ fun ButtonsForSignIn(userViewModel: UserViewModel, onSignInButtonClicked: () -> 
             Text("Sign In With Email", color = Color.Black)
         }
         Button(
-            onClick = {},
+            onClick = {
+                onSignInButtonClicked()
+
+            },
             enabled = isEnabled,
             modifier = Modifier.width(200.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan)
@@ -154,7 +156,10 @@ fun ButtonsForSignIn(userViewModel: UserViewModel, onSignInButtonClicked: () -> 
             Text("Sign In With Phone", color = Color.Black)
         }
         Button(
-            onClick = {},
+            onClick = {
+                onSignInButtonClicked()
+
+            },
             enabled = isEnabled,
             modifier = Modifier.width(200.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan)
@@ -162,7 +167,9 @@ fun ButtonsForSignIn(userViewModel: UserViewModel, onSignInButtonClicked: () -> 
             Text("Sign In With Google", color = Color.Black)
         }
         Button(
-            onClick = {},
+            onClick = {
+                onSignInButtonClicked()
+            },
             enabled = isEnabled,
             modifier = Modifier.width(200.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan)

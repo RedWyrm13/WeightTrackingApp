@@ -12,7 +12,7 @@ class UserViewModel(private val calendarRepositoryImplementation: CalendarReposi
     // This is used to determine if we use kg or lbs. True is lbs.  False is kg
     var isPounds: Boolean by mutableStateOf(true)
 
-    val currentWeihgt: Double
+    val currentWeight: Double
         get() = currentWeightInput.toDoubleOrNull() ?: 0.0
 
 
