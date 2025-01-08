@@ -14,18 +14,6 @@ import com.example.weighttracking.ui.theme.viewmodel.ScreenViewModel
 
 
 @Composable
-fun WeightTrackingApp(calendarViewModel: CalendarViewModel, screenViewModel: ScreenViewModel) {
-
-    MainScreen(
-        calendarViewModel = calendarViewModel,
-        screenViewModel = screenViewModel
-    )
-}
-
-
-
-
-@Composable
 fun MainScreen(
     calendarViewModel: CalendarViewModel,
     screenViewModel: ScreenViewModel,
