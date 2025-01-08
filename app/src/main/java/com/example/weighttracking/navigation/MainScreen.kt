@@ -1,4 +1,4 @@
-package com.example.weighttracking.ui.theme
+package com.example.weighttracking.navigation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,6 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.weighttracking.ui.theme.ButtonBoxAndText
+import com.example.weighttracking.ui.theme.Calendar
+import com.example.weighttracking.ui.theme.GraphView
 import com.example.weighttracking.ui.theme.viewmodel.CalendarViewModel
 import com.example.weighttracking.ui.theme.viewmodel.ScreenViewModel
 
