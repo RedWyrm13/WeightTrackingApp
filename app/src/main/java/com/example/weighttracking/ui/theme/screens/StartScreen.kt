@@ -44,15 +44,27 @@ import java.time.LocalDate
 @Composable
 fun StartScreen(userViewModel: UserViewModel, onSignInButtonClicked: () -> Unit) {
     Surface(modifier = Modifier.fillMaxSize().safeContentPadding(), color = Color.White) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+        ) {
 
-        Text(text = "Welcome to Weight Tracking! (Working on a better name)", color = Color.Black, fontSize = 30.sp)
+            Text(text = "Welcome to ", color = Color.Black, fontSize = 30.sp)
+            Text(text = "Weight Tracking!", color = Color.Black, fontSize = 30.sp)
 
-        StartScreenMainContent(userViewModel = userViewModel, onSignInButtonClicked = onSignInButtonClicked)
+
+            StartScreenMainContent(
+                userViewModel = userViewModel,
+                onSignInButtonClicked = onSignInButtonClicked,
+                modifier = Modifier
+            )
+        }
     }
 }
 
 @Composable
-fun StartScreenMainContent(userViewModel: UserViewModel, onSignInButtonClicked: () -> Unit) {
+fun StartScreenMainContent(userViewModel: UserViewModel, onSignInButtonClicked: () -> Unit, modifier : Modifier = Modifier) {
     var enabled by remember { mutableStateOf(false) }
 
     if (userViewModel.currentWeightInput.isNotEmpty()) {
@@ -61,7 +73,7 @@ fun StartScreenMainContent(userViewModel: UserViewModel, onSignInButtonClicked: 
 Column(
     modifier = Modifier.fillMaxSize(),
     verticalArrangement = Arrangement.Center,
-    horizontalAlignment = Alignment.CenterHorizontally
+    horizontalAlignment = Alignment.CenterHorizontally,
 ) {
     Text(text = "Please enter your current weight:", color = Color.Black, fontSize = 24.sp)
     Spacer(Modifier.padding(16.dp))
@@ -69,7 +81,6 @@ Column(
     Boxes(userViewModel = userViewModel)
     ButtonsForSignIn(
         userViewModel = userViewModel,
-        enabled = enabled,
         onSignInButtonClicked = onSignInButtonClicked
     )
 }
@@ -119,47 +130,48 @@ fun Boxes(userViewModel: UserViewModel){
 }
 
 @Composable
-fun ButtonsForSignIn(userViewModel: UserViewModel, enabled: Boolean, onSignInButtonClicked: () -> Unit) {
+fun ButtonsForSignIn(userViewModel: UserViewModel, onSignInButtonClicked: () -> Unit) {
+    val isEnabled = userViewModel.currentWeightInput.isNotEmpty()
 
     Column(
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally,
-    )
-        {
-        Button(onClick = {},
-            enabled = enabled,
+    ) {
+        Button(
+            onClick = {},
+            enabled = isEnabled, // Dynamically enable/disable based on input
             modifier = Modifier.width(200.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan)
-            ) {
+        ) {
             Text("Sign In With Email", color = Color.Black)
         }
-        Button(onClick = {},
-            enabled = enabled,
+        Button(
+            onClick = {},
+            enabled = isEnabled,
             modifier = Modifier.width(200.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan)
-
         ) {
             Text("Sign In With Phone", color = Color.Black)
         }
-        Button(onClick = {},
-            enabled = enabled,
+        Button(
+            onClick = {},
+            enabled = isEnabled,
             modifier = Modifier.width(200.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan)
-
         ) {
             Text("Sign In With Google", color = Color.Black)
         }
-        Button(onClick = {},
-            enabled = enabled,
+        Button(
+            onClick = {},
+            enabled = isEnabled,
             modifier = Modifier.width(200.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan)
-
         ) {
             Text("Sign In With Facebook", color = Color.Black)
         }
-
     }
 }
+
 @Composable
 fun PoundsBox(isSelected: Boolean, onClick: (Boolean) -> Unit) {
     Box(
